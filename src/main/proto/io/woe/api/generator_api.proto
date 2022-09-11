@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+import "kalix/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+package io.woe.api;
+
+option java_outer_classname = "GeneratorApi";
+
+service Generator {
+  option (kalix.codegen) = {
+    event_sourced_entity: {
+      name: "io.woe.entity.Generator"
+      entity_type: "generator"
+      state: "io.woe.entity.GeneratorState"
+      events: [
+        "io.woe.entity.GeneratorCreated",
+        "io.woe.entity.GenerateDevicesRequested",
+        "io.woe.entity.GenerateDeviceRequested"  //
+      ]
+    }
+  };
+
+  rpc CreateGenerator(CreateGeneratorCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/generator/create"
+      body: "*"
+    };
+  }
+
+  rpc GenerateDevices(GenerateDevicesCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/generator/generate-devices"
+      body: "*"
+    };
+  }
+}
+
+message CreateGeneratorCommand {
+  string generator_id = 1 [(kalix.field).entity_key = true];
+  double lat = 2;
+  double lng = 3;
+  double radius = 4;
+  int32 device_count = 5;
+  int32 generation_rate_per_sec = 6;
+}
+
+message GenerateDevicesCommand {
+  string generator_id = 1 [(kalix.field).entity_key = true];
+  string device_id = 2;
+  double lat = 3;
+  double lng = 4;
+}

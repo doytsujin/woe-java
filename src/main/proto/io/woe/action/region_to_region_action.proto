@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package io.woe.action;
+
+import "kalix/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "io/woe/entity/region_entity.proto";
+
+option java_outer_classname = "RegionToRegionService";
+
+service RegionToRegion {
+  option (kalix.codegen) = {
+    action: {}
+  };
+
+  rpc OnRegionUpdated(entity.RegionUpdated) returns (google.protobuf.Empty) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "region"
+    };
+  }
+
+  rpc OnRegionAggregated(entity.RegionAggregated) returns (google.protobuf.Empty) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "region"
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "region"
+      ignore: true
+    };
+  }
+}

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package io.woe.entity;
+
+option java_outer_classname = "RegionEntity";
+
+message RegionState {
+  string region_id = 1;
+  double lat = 2;
+  double lng = 3;
+  int32 level = 4;
+  repeated SubRegion sub_regions = 5;
+}
+
+message SubRegion {
+  string region_id = 1;
+  int32 level = 2;
+  double lat = 3;
+  double lng = 4;
+  int32 device_count = 5;
+  int32 device_count_alarm = 6;
+}
+
+message RegionUpdated {
+  string region_id = 1;
+  int32 level = 2;
+  double lat = 3;
+  double lng = 4;
+}
+
+message RegionAggregated {
+  string region_id = 1;
+  int32 level = 2;
+  double lat = 3;
+  double lng = 4;
+  int32 device_count = 5;
+  int32 device_count_alarm = 6;
+}

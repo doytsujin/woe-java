@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package io.woe.action;
+
+import "kalix/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "io/woe/entity/generator_entity.proto";
+
+option java_outer_classname = "GeneratorToGeneratorService";
+
+service GeneratorToGenerator {
+  option (kalix.codegen) = {
+    action: {}
+  };
+
+  rpc OnGeneratrDevicesRequested(entity.GenerateDevicesRequested) returns (google.protobuf.Empty) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "generator"
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "generator"
+      ignore: true
+    };
+  }
+}

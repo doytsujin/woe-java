@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package io.woe.entity;
+
+import "google/protobuf/timestamp.proto";
+
+option java_outer_classname = "DeviceEntity";
+
+message DeviceState {
+  string device_id = 1;
+  double lat = 2;
+  double lng = 3;
+  bool device_alarm_on = 4;
+  google.protobuf.Timestamp time_of_last_ping = 5;
+  google.protobuf.Timestamp time_of_alarm_on = 6;
+}
+
+message DeviceCreated {
+  string device_id = 1;
+  double lat = 2;
+  double lng = 3;
+}
+
+message DeviceStateUpdated {
+  string device_id = 1;
+  double lat = 2;
+  double lng = 3;
+  bool device_alarm_on = 4;
+}

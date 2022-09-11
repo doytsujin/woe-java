@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package io.woe.entity;
+
+option java_outer_classname = "GeneratorEntity";
+
+message GeneratorState {
+  string generator_id = 1;
+  double lat = 2;
+  double lng = 3;
+  double radius = 4;
+  int32 devices_to_generate = 5;
+  int32 devices_generated = 6;
+  int32 generation_rate_per_sec = 7;
+}
+
+message GeneratorCreated {
+  string generator_id = 1;
+  double lat = 2;
+  double lng = 3;
+  double radius = 4;
+  int32 devices_to_generate = 5;
+  int32 generation_rate_per_sec = 6;
+}
+
+message GenerateDevicesRequested {
+  string generator_id = 1;
+  double lat = 2;
+  double lng = 3;
+  int32 device_count = 4;
+}
+
+message GenerateDeviceRequested {
+  string generator_id = 1;
+  double lat = 2;
+  double lng = 3;
+}

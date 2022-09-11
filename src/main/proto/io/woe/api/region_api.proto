@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+import "kalix/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+import "io/woe/entity/region_entity.proto";
+
+package io.woe.api;
+
+option java_outer_classname = "RegionApi";
+
+service Region {
+  option (kalix.codegen) = {
+    event_sourced_entity: {
+      name: "io.woe.entity.Region"
+      entity_type: "region"
+      state: "io.woe.entity.RegionState"
+      events: [
+        "io.woe.entity.RegionUpdated",
+        "io.woe.entity.RegionAggregated"  //
+      ]
+    }
+  };
+
+  rpc SubRegionState(SubRegionStateCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "region/sub-region-state"
+      body: "*"
+    };
+  }
+
+  rpc AggregateRegion(AggregateRegionCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "region/aggregate-region"
+      body: "*"
+    };
+  }
+
+  rpc GetRegionState(GetRegionStateRequest) returns (GetRegionStateResponse) {
+    option (google.api.http) = {
+      get: "/region/get-region-state/{regionId}"
+    };
+  }
+}
+
+message SubRegionStateCommand {
+  string region_id = 1 [(kalix.field).entity_key = true];
+  int32 level = 2;
+  double lat = 3;
+  double lng = 4;
+  int32 device_count = 5;
+  int32 device_count_alarm = 6;
+}
+
+message AggregateRegionCommand {
+  string region_id = 1 [(kalix.field).entity_key = true];
+  double lat = 2;
+  double lng = 3;
+  int32 level = 4;
+}
+
+message GetRegionStateRequest {
+  string region_id = 1 [(kalix.field).entity_key = true];
+  double lat = 2;
+  double lng = 3;
+  int32 level = 4;
+}
+
+message GetRegionStateResponse {
+  string region_id = 1 [(kalix.field).entity_key = true];
+  double lat = 2;
+  double lng = 3;
+  int32 level = 4;
+  int32 device_count = 5;
+  int32 device_count_alarm = 6;
+  repeated entity.SubRegion sub_regions = 7;
+}

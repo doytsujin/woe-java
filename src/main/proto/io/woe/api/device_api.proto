@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+import "kalix/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+package io.woe.api;
+
+option java_outer_classname = "DeviceApi";
+
+service Device {
+  option (kalix.codegen) = {
+    event_sourced_entity: {
+      name: "io.woe.entity.Device"
+      entity_type: "device"
+      state: "io.woe.entity.DeviceState"
+      events: [
+        "io.woe.entity.DeviceCreated",
+        "io.woe.entity.DeviceStateUpdated"  //
+      ]
+    }
+  };
+
+  rpc CreateDevice(CreateDeviceCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/device/create-device"
+      body: "*"
+    };
+  }
+
+  rpc PingDevice(PingDeviceCommand) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "device/ping-device"
+      body: "*"
+    };
+  }
+}
+
+message CreateDeviceCommand {
+  string device_id = 1 [(kalix.field).entity_key = true];
+  double lat = 2;
+  double lng = 3;
+}
+
+message PingDeviceCommand {
+  string device_id = 1 [(kalix.field).entity_key = true];
+  double lat = 2;
+  double lng = 3;
+  bool device_alarm_on = 4;
+}

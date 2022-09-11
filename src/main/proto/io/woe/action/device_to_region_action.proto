@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package io.woe.action;
+
+import "kalix/annotations.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/any.proto";
+import "io/woe/entity/device_entity.proto";
+
+option java_outer_classname = "DeviceToRegionService";
+
+service DeviceToRegion {
+  option (kalix.codegen) = {
+    action: {}
+  };
+
+  rpc OnDeviceCreated(entity.DeviceCreated) returns (google.protobuf.Empty) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "device"
+    };
+  }
+
+  rpc OnDeviceStateUpdated(entity.DeviceStateUpdated) returns (google.protobuf.Empty) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "device"
+    };
+  }
+
+  rpc IgnoreOtherEvents(google.protobuf.Any) returns (google.protobuf.Empty) {
+    option (kalix.method).eventing.in = {
+      event_sourced_entity: "device"
+      ignore: true
+    };
+  }
+}
